@@ -1,6 +1,6 @@
 # Mystem
 
-The Elixir wrapper of the Yandex Mystem 3 morphological analyzer
+The Elixir wrapper of the [Yandex Mystem 3 morphological analyzer](https://yandex.ru/dev/mystem/)
 
 ## A Quick Example
 
@@ -9,17 +9,15 @@ Lemmatization
 ```elixir
 iex(1)> text = "Красивая мама красиво мыла раму"
 "Красивая мама красиво мыла раму"
-iex(2)> {:ok, lemmas} = Mystem.lemmatize(text)
+iex(2)> {:ok, lemmas} = Mystemex.lemmatize(text)
 {:ok,
 ["красивый", "мама", "красиво", "мыть", "рама"]}
-iex(3)> lemmas |> Enum.join(" ")
-"красивый мама красиво мыть рама"
 ```
 
 Getting grammatical information and lemmas.
 
 ```elixir
-iex(4)> {:ok, analyze} = Mystem.analyze(text)
+iex(4)> {:ok, analyze} = Mystemex.analyze(text)
 {:ok,
   [
     %{
@@ -67,6 +65,12 @@ iex(4)> {:ok, analyze} = Mystem.analyze(text)
 ]}
 ```
 
+You can find usage examples in `test` directory.
+
+**Types**
+
+Return value types are described in `Mystemex.Types`
+
 **Dependencies**
 
 Need install `mystem` binary file to your .local/bin directory:
@@ -77,25 +81,31 @@ Need install `mystem` binary file to your .local/bin directory:
 
 **Settings**
 
-`pool_size` -- size of workers pool;
+See `config/configs.exs`.
 
-`pool_max_overflow` -- max overflow for pool size.
+`pool_size` is size of workers pool;
+
+`pool_max_overflow` is max overflow for pool size.
 
 
 ## Installation
 
-```
-mix deps.get
-mix compile
-```
+1. Install `mystem` binary package to your `.local/bin`. Download from here: [https://yandex.ru/dev/mystem/](https://yandex.ru/dev/mystem/)
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
+2. If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 by adding `mystemex` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
   [
-    {:mystemex, "~> 0.1.0"}
+    {:mystemex, "~> 0.2.0"}
   ]
 end
+```
+
+or build from this source:
+
+```
+mix deps.get
+mix compile
 ```

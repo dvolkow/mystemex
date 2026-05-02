@@ -1,8 +1,12 @@
-defmodule Mystem.Pool do
+defmodule Mystemex.Pool do
+  @moduledoc """
+  Provides a pool of workers to handle user requests.
+  """
+
   use Supervisor
   @pool_query_timeout 10_000
 
-  alias Mystem.Types
+  alias Mystemex.Types
 
   def start_link(_opts) do
     Supervisor.start_link(__MODULE__, [], name: __MODULE__)
@@ -11,14 +15,14 @@ defmodule Mystem.Pool do
   @impl true
   def init(_) do
     pool_options = [
-      name: {:local, :mystem_pool},
-      worker_module: Mystem.Worker,
-      size: Application.get_env(:mystem, :pool_size),
-      max_overflow: Application.get_env(:mystem, :pool_max_overflow)
+      name: {:local, :mystemex_pool},
+      worker_module: Mystemex.Worker,
+      size: Application.get_env(:mystemex, :pool_size),
+      max_overflow: Application.get_env(:mystemex, :pool_max_overflow)
     ]
 
     children = [
-      :poolboy.child_spec(:mystem_pool, pool_options, [])
+      :poolboy.child_spec(:mystem_poolex, pool_options, [])
     ]
 
     Supervisor.init(children, strategy: :one_for_one)
@@ -27,7 +31,7 @@ defmodule Mystem.Pool do
   @spec query(Types.query_type()) :: Types.responses()
   def query(query) do
     :poolboy.transaction(
-      :mystem_pool,
+      :mystemex_pool,
       fn worker ->
         GenServer.call(worker, query)
       end,

@@ -1,5 +1,5 @@
 import Config
 
-config :mystem,
+config :mystemex,
   pool_size: 2,
   pool_max_overflow: 2

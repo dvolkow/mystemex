@@ -1,4 +1,8 @@
-defmodule Mystem.Types do
+defmodule Mystemex.Types do
+  @moduledoc """
+  Here are the types that are used in
+  """
+
   @type base_response(a) :: {:ok, a} | {:exit_code, integer()} | {:error, String.t()}
   @type analysis_item() :: %{
           required(:gr) => String.t(),

@@ -14,12 +14,24 @@ defmodule Mystemex.Worker do
   end
 
   def init(_index) do
-    port_pid =
-      Port.open({:spawn, "mystem --weight --format json -d -gi"}, [:binary, :exit_status])
+    mystem_path = Application.fetch_env!(:mystemex, :mystem_path) |> Path.expand()
 
-    Logger.debug("mystemex worker has been started")
-    Port.monitor(port_pid)
-    {:ok, port_pid}
+    case File.exists?(mystem_path) do
+      true ->
+        port_pid =
+          Port.open({:spawn, "#{mystem_path} --weight --format json -d -gi"}, [
+            :binary,
+            :exit_status
+          ])
+
+        Logger.debug("mystemex worker has been started")
+        Port.monitor(port_pid)
+        {:ok, port_pid}
+
+      false ->
+        Logger.error("Install mystem binaries or setup mystem_path")
+        {:error, "invalid mystem_path"}
+    end
   end
 
   def handle_call(:get, _, port) do
@@ -60,8 +72,15 @@ defmodule Mystemex.Worker do
   def handle_call({:lemmatize_word, text}, _, port) do
     case receive_from(port, text) do
       {:ok, data} ->
-        resp = data |> Enum.map(&get_lemma/1) |> Enum.filter(fn x -> x != nil end)
-        {:reply, {:ok, resp}, port}
+        resp =
+          case data |> Enum.map(&get_lemma/1) |> Enum.filter(fn x -> x != nil end) do
+            [w] when is_binary(w) -> {:ok, w}
+            [w | _] when is_binary(w) -> {:ok, w}
+            [] -> {:ok, ""}
+            _ -> {:error, "lemmatize_word failed"}
+          end
+
+        {:reply, resp, port}
 
       {:exit_code, exit_code} ->
         {:reply, {:exit_code, exit_code}, port}

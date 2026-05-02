@@ -71,17 +71,11 @@ You can find usage examples in `test` directory.
 
 Return value types are described in `Mystemex.Types`
 
-**Dependencies**
-
-Need install `mystem` binary file to your .local/bin directory:
-
-```
-~/.local/bin/mystem
-```
-
 **Settings**
 
 See `config/configs.exs`.
+
+`mystem_path` is path to your Mystem binaries;
 
 `pool_size` is size of workers pool;
 
@@ -90,7 +84,7 @@ See `config/configs.exs`.
 
 ## Installation
 
-1. Install `mystem` binary package to your `.local/bin`. Download from here: [https://yandex.ru/dev/mystem/](https://yandex.ru/dev/mystem/)
+1. Install `mystem` binary package to your system. Download from here: [https://yandex.ru/dev/mystem/](https://yandex.ru/dev/mystem/)
 
 2. If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 by adding `mystemex` to your list of dependencies in `mix.exs`:
@@ -101,6 +95,7 @@ def deps do
     {:mystemex, "~> 0.2.0"}
   ]
 end
+
 ```
 
 or build from this source:
@@ -109,3 +104,5 @@ or build from this source:
 mix deps.get
 mix compile
 ```
+
+3. Setup Mystem binaries path (`:mystemex, :mystem_path` in your config).

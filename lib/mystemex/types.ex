@@ -19,8 +19,9 @@ defmodule Mystemex.Types do
 
   @type analyze_response() :: base_response(analyze_items())
   @type lemmatize_response() :: base_response(list(String.t()))
+  @type lemmatize_word_response() :: base_response(String.t())
 
-  @type responses() :: analyze_response() | lemmatize_response()
+  @type responses() :: analyze_response() | lemmatize_response() | lemmatize_word_response()
 
   @type query_kind() :: :analyze | :lemmatize | :lemmatize_word
   @type query_type() :: {query_kind(), String.t()}

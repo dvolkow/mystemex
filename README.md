@@ -1,4 +1,4 @@
-# Mystem
+# Mystemex
 
 The Elixir wrapper of the [Yandex Mystem 3 morphological analyzer](https://yandex.ru/dev/mystem/)
 

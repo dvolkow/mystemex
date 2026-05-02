@@ -106,3 +106,8 @@ mix compile
 ```
 
 3. Setup Mystem binaries path (`:mystemex, :mystem_path` in your config).
+
+
+## ⚠️ License Notice
+This library is MIT-licensed, but Mystem itself is proprietary Yandex software.
+You must download it separately and accept its license.

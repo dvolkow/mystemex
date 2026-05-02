@@ -1,8 +1,8 @@
 defmodule Mystemex.Worker do
-  @moduledoc """
-  A worker instance for the pool. User request handlers are implemented here.
-  Each instance runs a binary mystem as port and monitor its.
-  """
+  @moduledoc false
+  #
+  # A worker instance for the pool. User request handlers are implemented here.
+  # Each instance runs a binary mystem as port and monitor its.
 
   @worker_timeout 5_000
   @timeout_error "timeout has been exceed"

@@ -1,5 +1,8 @@
 import Config
 
-config :mystem,
-  pool_size: 2,
-  pool_max_overflow: 2
+config :mystemex,
+  # path to Mystem binaries:
+  mystem_path: "~/.local/bin/mystem",
+  # setup your pool:
+  pool_size: 1,
+  pool_max_overflow: 1

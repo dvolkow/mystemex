@@ -1,5 +1,6 @@
 defmodule Mystem.Application do
   use Application
+  require Logger
 
   @impl true
   def start(_type, _args) do
@@ -8,12 +9,12 @@ defmodule Mystem.Application do
     ]
 
     opts = [strategy: :one_for_one, name: Mystem.Supervisor]
-    IO.puts("Mystem[Ex] start...")
+    Logger.debug("Mystem start...")
     Supervisor.start_link(children, opts)
   end
 
   @impl true
   def stop(_state) do
-    IO.puts("Mystem[Ex] has been stopped.")
+    Logger.debug("Mystem has been stopped")
   end
 end

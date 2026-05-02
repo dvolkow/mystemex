@@ -2,6 +2,8 @@ defmodule Mystem.Pool do
   use Supervisor
   @pool_query_timeout 10_000
 
+  alias Mystem.Types
+
   def start_link(_opts) do
     Supervisor.start_link(__MODULE__, [], name: __MODULE__)
   end
@@ -22,6 +24,7 @@ defmodule Mystem.Pool do
     Supervisor.init(children, strategy: :one_for_one)
   end
 
+  @spec query(Types.query_type()) :: Types.responses()
   def query(query) do
     :poolboy.transaction(
       :mystem_pool,

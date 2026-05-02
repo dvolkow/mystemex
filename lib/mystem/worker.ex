@@ -9,29 +9,32 @@ defmodule Mystem.Worker do
   end
 
   def init(_index) do
-    port = Port.open({:spawn, "mystem --weight --format json -d -gi"}, [])
+    port_pid =
+      Port.open({:spawn, "mystem --weight --format json -d -gi"}, [:binary, :exit_status])
+
     Logger.debug("mystem worker has been started")
-    {:ok, %{port: port}}
+    Port.monitor(port_pid)
+    {:ok, port_pid}
   end
 
-  def handle_call(:get, _, state) do
-    {:reply, state, state}
+  def handle_call(:get, _, port) do
+    {:reply, port, port}
   end
 
-  def handle_call({:analyze, text}, _, %{port: port} = state) do
+  def handle_call({:analyze, text}, _, port) do
     case receive_from(port, text) do
       {:ok, data} ->
-        {:reply, {:ok, data}, state}
+        {:reply, {:ok, data}, port}
 
       {:exit_code, exit_code} ->
-        {:reply, {:exit_code, exit_code}, state}
+        {:reply, {:exit_code, exit_code}, port}
 
-      {:error, _timeout} ->
-        {:reply, {:error, @timeout_error}, state}
+      {:error, :timeout} ->
+        {:reply, {:error, @timeout_error}, port}
     end
   end
 
-  def handle_call({:lemmatize, text}, _, %{port: port} = state) do
+  def handle_call({:lemmatize, text}, _, port) when is_binary(text) do
     resp =
       text
       |> String.split("\n", trim: true)
@@ -42,23 +45,34 @@ defmodule Mystem.Worker do
       end)
       |> List.flatten()
 
-    {:reply, {:ok, resp}, state}
+    {:reply, {:ok, resp}, port}
   end
 
-  def handle_call({:lemmatize_one, text}, _, %{port: port} = state) do
+  def handle_call({:lemmatize, _}, _, port) do
+    {:reply, {:error, "bad type of text"}, port}
+  end
+
+  def handle_call({:lemmatize_word, text}, _, port) do
     case receive_from(port, text) do
       {:ok, data} ->
         resp = data |> Enum.map(&get_lemma/1) |> Enum.filter(fn x -> x != nil end)
-        {:reply, {:ok, resp}, state}
+        {:reply, {:ok, resp}, port}
 
       {:exit_code, exit_code} ->
-        {:reply, {:exit_code, exit_code}, state}
+        {:reply, {:exit_code, exit_code}, port}
 
-      {:error, _timeout} ->
-        {:reply, {:error, @timeout_error}, state}
+      {:error, :timeout} ->
+        {:reply, {:error, @timeout_error}, port}
     end
   end
 
+  def handle_info({_, {:exit_status, status}}, port) do
+    Logger.error("port has been failed: #{status}")
+    {:stop, status, port}
+  end
+
+  @spec receive_from(port(), String.t()) ::
+          {:ok, String.t()} | {:exit_code, number()} | {:error, :timeout}
   defp receive_from(port, text) do
     Port.command(port, text <> "\n")
 
@@ -71,10 +85,11 @@ defmodule Mystem.Worker do
         {:exit_code, exit_code}
     after
       @worker_timeout ->
-        {:error, @worker_timeout}
+        {:error, :timeout}
     end
   end
 
+  @spec get_lemma(map()) :: nil | binary()
   defp get_lemma(%{"analysis" => [], "text" => text}) do
     text
   end

@@ -4,8 +4,8 @@ defmodule Mystem.MixProject do
   def project do
     [
       app: :mystem,
-      version: "0.1.0",
-      elixir: "~> 1.18-dev",
+      version: "0.2.0",
+      elixir: "~> 1.18",
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
@@ -21,7 +21,7 @@ defmodule Mystem.MixProject do
   defp deps do
     [
       {:poolboy, "~> 1.5"},
-      {:jason, "~> 1.1.2"}
+      {:jason, "~> 1.4.4"}
     ]
   end
 end

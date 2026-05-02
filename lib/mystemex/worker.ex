@@ -16,18 +16,17 @@ defmodule Mystemex.Worker do
   def init(_index) do
     mystem_path = Application.fetch_env!(:mystemex, :mystem_path) |> Path.expand()
 
-    case File.exists?(mystem_path) do
-      true ->
-        port_pid =
-          Port.open({:spawn, "#{mystem_path} --weight --format json -d -gi"}, [
-            :binary,
-            :exit_status
-          ])
+    with true <- File.exists?(mystem_path),
+         port_pid <-
+           Port.open({:spawn, "#{mystem_path} --weight --format json -d -gi"}, [
+             :binary,
+             :exit_status
+           ]),
+         res when is_reference(res) <- Port.monitor(port_pid) do
+      Logger.debug("mystemex worker has been started")
 
-        Logger.debug("mystemex worker has been started")
-        Port.monitor(port_pid)
-        {:ok, port_pid}
-
+      {:ok, port_pid}
+    else
       false ->
         Logger.error("Install mystem binaries or setup mystem_path")
         {:error, "invalid mystem_path"}
@@ -93,6 +92,11 @@ defmodule Mystemex.Worker do
   def handle_info({_, {:exit_status, status}}, port) do
     Logger.error("port has been failed: #{status}")
     {:stop, status, port}
+  end
+
+  def handle_info(message, port) do
+    Logger.warning("unknown mystem port message: #{inspect(message)}")
+    {:noreply, port}
   end
 
   @spec receive_from(port(), String.t()) ::

@@ -22,7 +22,7 @@ defmodule Mystemex.Pool do
     ]
 
     children = [
-      :poolboy.child_spec(:mystem_poolex, pool_options, [])
+      :poolboy.child_spec(:mystemex_pool, pool_options, [])
     ]
 
     Supervisor.init(children, strategy: :one_for_one)

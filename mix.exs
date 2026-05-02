@@ -11,7 +11,8 @@ defmodule Mystemex.MixProject do
 
       # Docs
       name: "Mystemex",
-      description: "Elixir wrapper for Yandex Mystem 3 morphological analyzer",
+      description:
+        "Elixir wrapper for Yandex Mystem 3 morphological analyzer for Russian language",
       source_url: "https://github.com/dvolkow/mystemex",
       homepage_url: "https://github.com/dvolkow/mystemex",
       package: package(),

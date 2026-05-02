@@ -1,10 +1,10 @@
 # Mystemex
 
-The Elixir wrapper of the [Yandex Mystem 3 morphological analyzer](https://yandex.ru/dev/mystem/)
+The Elixir wrapper of the [Yandex Mystem 3 morphological analyzer](https://yandex.ru/dev/mystem/) for Russian language.
 
 ## A Quick Example
 
-Lemmatization
+Lemmatization:
 
 ```elixir
 iex(1)> text = "Красивая мама красиво мыла раму"
@@ -14,7 +14,7 @@ iex(2)> {:ok, lemmas} = Mystemex.lemmatize(text)
 ["красивый", "мама", "красиво", "мыть", "рама"]}
 ```
 
-Getting grammatical information and lemmas.
+Getting grammatical information and lemmas:
 
 ```elixir
 iex(4)> {:ok, analyze} = Mystemex.analyze(text)

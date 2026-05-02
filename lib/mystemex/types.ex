@@ -1,6 +1,6 @@
 defmodule Mystemex.Types do
   @moduledoc """
-  Here are the types that are used in
+  Here are the types that are used in Mystemex.
   """
 
   @type base_response(a) :: {:ok, a} | {:exit_code, integer()} | {:error, String.t()}

@@ -1,7 +1,7 @@
 defmodule Mystemex.Pool do
-  @moduledoc """
-  Provides a pool of workers to handle user requests.
-  """
+  @moduledoc false
+  #
+  # Provides a pool of workers to handle user requests.
 
   use Supervisor
   @pool_query_timeout 10_000
@@ -22,12 +22,15 @@ defmodule Mystemex.Pool do
     ]
 
     children = [
-      :poolboy.child_spec(:mystem_poolex, pool_options, [])
+      :poolboy.child_spec(:mystemex_pool, pool_options, [])
     ]
 
     Supervisor.init(children, strategy: :one_for_one)
   end
 
+  @doc """
+  Pool Interface. This is where we send requests to mystem.
+  """
   @spec query(Types.query_type()) :: Types.responses()
   def query(query) do
     :poolboy.transaction(

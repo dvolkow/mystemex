@@ -1,10 +1,10 @@
 # Mystemex
 
-The Elixir wrapper of the [Yandex Mystem 3 morphological analyzer](https://yandex.ru/dev/mystem/)
+The Elixir wrapper of the [Yandex Mystem 3 morphological analyzer](https://yandex.ru/dev/mystem/) for Russian language.
 
 ## A Quick Example
 
-Lemmatization
+Lemmatization:
 
 ```elixir
 iex(1)> text = "Красивая мама красиво мыла раму"
@@ -14,7 +14,7 @@ iex(2)> {:ok, lemmas} = Mystemex.lemmatize(text)
 ["красивый", "мама", "красиво", "мыть", "рама"]}
 ```
 
-Getting grammatical information and lemmas.
+Getting grammatical information and lemmas:
 
 ```elixir
 iex(4)> {:ok, analyze} = Mystemex.analyze(text)
@@ -106,3 +106,8 @@ mix compile
 ```
 
 3. Setup Mystem binaries path (`:mystemex, :mystem_path` in your config).
+
+
+## ⚠️ License Notice
+This library is MIT-licensed, but Mystem itself is proprietary Yandex software.
+You must download it separately and accept its license.

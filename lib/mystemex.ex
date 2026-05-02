@@ -1,6 +1,6 @@
 defmodule Mystemex do
   @moduledoc """
-  Wrapper of the Yandex Mystem 3 morphological analyzer.
+  Wrapper of the Yandex Mystem 3 morphological analyzer for Russian language.
   Source info: https://yandex.ru/dev/mystem/
   """
 

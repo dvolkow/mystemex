@@ -4,16 +4,22 @@ defmodule Mystemex.MixProject do
   def project do
     [
       app: :mystemex,
-      version: "0.2.0",
+      version: "0.2.1",
       elixir: "~> 1.18",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
 
       # Docs
       name: "Mystemex",
+      description:
+        "Elixir wrapper for Yandex Mystem 3 morphological analyzer for Russian language",
       source_url: "https://github.com/dvolkow/mystemex",
       homepage_url: "https://github.com/dvolkow/mystemex",
-      package: package()
+      package: package(),
+      docs: [
+        main: "Mystemex",
+        extras: ["README.md", "LICENSE"]
+      ]
     ]
   end
 
